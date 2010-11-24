@@ -1,0 +1,323 @@
+     JS:
+     This jquery plugin offers control over a custom build tab component
+     The component aims to provide the following features:
+     		1. Possibility to move from one tab to another using tab headers 
+             click event or navigation buttons
+           	2. Possibility to use form submit in the last tab either plain submit
+          	or ajax submit without losing focus on the wizardTab component.
+          	(validation client side or server should allow posibility of
+          	correction in the tabs)
+          	3. Possibility to change wizardTab component state from wizard mode
+          	to plain mode which means: 
+          		- in wizard mode: only navigation buttons will be used
+          		- plain tab mode: buttons navigation should be possible as 
+          			well as top tab header navigation.
+     		4. Possibility to hide/show or enable/disable the invalid buttons. 
+     				- invalid buttons are: when in first tab, the previous button is an invalid button
+     									   when in last tab the next button is an invalid button
+     		5. Possibility to have captions for navigation buttons.
+     		6. Possibility to have scroll functionality and hide/disable for each button individually
+     
+     This component provide external method(functions) to call internal functionality: 
+     		a) onTabChange: set the fn (function name) to be called when the 
+     						tab is changed. Offer posibility to control or 
+     						extend functionality on a tab change 
+     						(eg: validation of previes tab, show some ui element
+     							 if the previous tab request this)
+     
+           b) onTabFirst:  set the fn to be called if the first tab is the 
+           				current tab on the screen (eg. if the first tab is
+           				visible do not show the previous button)
+           
+           c) onTabLast:	set the fn to be called if the last tab is the
+           				current tab on the screen. (eg. if is the last tab
+           				do not show the next button, or submit a form if 
+           				condition are meet or change the name of the next 
+           				button to submit)
+           				
+           d) IsFirst:    external method to check if the current tab is first
+           				-true: the current tab is first one
+           				-false: the current tab is not the first one
+           e) IsLast:     external method to check if the current tab is last
+           				-true: return true if the current tab is last one
+           				-false: return false if the current is not last one
+           f) IsWizard:    method that set the component as wizard mode or 
+           			     plain tab mode. Check above documentation.
+           				 -true: it will set the plugin in wizard mode
+           				 -false: it will set the plugin in non wizard mode
+           				 -called with no params it will return the current
+           					status of the plugin:
+           						- true: the plugin is in wizard mode
+           						- false: the plugin is in non wizard mode	
+           
+           g) onFinish:  set the fn to be called if the current tab is the last
+           			  tab and we want to call a function when we reach the 
+           			  last tab( eg. if previous validation are meet submit 
+           			  a form or change the component as plain default mode
+           			  if it was in wizard mode.
+	 	   h) hideInvalidNextButton: external method/option that 
+	 									will hide(true) the next button on last tab
+	 									will show(false) the next button on last tab
+	 	   i) disableInvalidNextButton: external method/option that will:
+	 									disable(true) the next button on the last tab
+	 									enable(false) the next button on the last tab
+	 	   j) hideInvalidPreviousButton: external method/option that will:
+	 									hide(true) the previous button on the first tab
+	 									show(false) the previous button on the first tab
+	 	   k) disableInvalidPreviousButton: external method/option that will:
+	 									disable(true) the previous button on the first tab
+	 									enable(false) the previous button on the first tab
+	 	   l) hideInvalidFinishButton: external method/option that will:
+	 									hide(true) the finish button if current tab is not the last one
+	 									show(false) the finish button if the current tab is not the last one
+	 	   m) disableInvalidFinishButton: external method/option that will:
+	 									disable(true) the finish button in the last tab
+	 									enable(false) the finish button in the last tab
+	 	   n) hideInvalidLeftScrollButton: external method/option that will:
+	 	   							hide(true) it will hide the button on first tab
+	 	   							show(false) it will show the button
+	 	   o) hideInvalidRightScrollButton: external method that will:
+	 	   							hide(true) and show(false) the button in last tab
+	 	   p)disableInvalidLeftScrollButton: external method/option that will disable the left scroll button
+	 	   q)disableInvalidRightScrollButton: external method/option that will disable/enable the right scroll button
+	 	   							
+	 
+	 	This setup the component you should use:
+	 		![must be provided, otherwise component will not function properly]
+	 		
+	 		Number of item requested  in case there are more than 1 WizardTab on the page:
+	 		(ids of the buttons must be provided as well as class to work with)
+	 		1, 2, 3, 4, 5, 29, 30, 31, 32, 37, 38, 39.
+	 		
+	 		All other items are all optional.
+	 		
+	 		
+	 		
+	 		1. isWizard: false/true which indicate that the component should start in: 
+	 					 - false plain mode
+	 					 - true wizard mode
+          	2. showTab:	[1..n] which tab should be shown first, number 
+	 							that should start from 1 (the first tab)
+	 		
+          	3. buttonNextId: indicate the id of the next button used for navigation
+	 		4. buttonPreviousId: indicate the id of the prev button used for navigation
+	 		5. buttonFinishId: inidcate the id of the finish button for 
+	 			using in form submit or any other functionality
+	 		6. buttonNextCaption: what capition should have the next button
+	 		7. buttonPreviousCaption: what capition should have the previous button
+	 		8. buttonFinishCaption: what capition should have the finish button
+	 
+	 		
+	 		9.  onFinish: 	on event occurs (read above )
+	 		10. onTabChange: on event occurs (read above)
+	 		11. onTabFirst:  on event occurs (read above)
+	 		12. onTabLast:   on event occurs (read above)
+     		13. hideInvalidNextButton: true/false is an option to hide or show the 
+     							   next button. Read above what invalid buttons are.
+     							   Defaults to false if is not provided.
+     	    14. disableInvalidNextButton: true/false is an option to disable or enable
+     								invalid next button. Read above for invalid buttons.
+     							    Defaults to false if is not provided.
+     		15. hideInvalidPreviousButton: true/false option to hide/show the previous
+     										button. Read above for more info.
+     		16. disableInvalidPreviousButton: true/false option to disable or enable
+     										the previoust button.
+     		17. hideInvalidFinishButton: true/false option to hide/show the finish button.
+     		18. disableInvalidFinishButton: true/false option to enable/disable the finish button.
+      	
+      	19. hideNextButton: method to hide the next button
+      	20. showNextButton: method to show the next button.
+      	
+      	21. hidePreviousButton: method to hide the previous button
+      	22. showPreviousButton: method to show the previous button
+      	
+      	23. hideFinishButton: method to hide the finish button
+      	24. showFinishButton: method to show the finish button
+       
+        25) hideInvalidLeftScrollButton: external method/option that will:
+	 	   							hide(true) it will hide the button on first tab
+	 	   							show(false) it will show the button
+	 	26) hideInvalidRightScrollButton: external method that will:
+	 	   							hide(true) and show(false) the button in last tab
+	 	27)disableInvalidLeftScrollButton: external method/option that will disable the left scroll button
+	 	28)disableInvalidRightScrollButton: external method/option that will disable/enable the right scroll button
+	 	29) classTabHeads: define the class used to style the tab heads. This is the ul container for tab heads.
+	 	30) buttonLeftScrollClass : css class "buttonLeftScroll" that apply to button left scroll
+		31) buttonRightScrollClass : css class "buttonRightScroll", that apply to button right scoll
+		32)	scrollTabsBy:1 - indicate the number of tabs to scroll at once. 
+		33)	hideInvalidLeftScrollButton:true, option to hide invalid left scroll button
+		34)	disableInvalidLeftScrollButton:false, option to disable invalid left scroll button
+        35)	hideInvalidRightScrollButton:true, option to hide invalid right scroll button
+		36)	disableInvalidRightScrollButton:false, option to disable invalid right scroll button
+        37)	allowPreviousWhenPassed:true, // this will activate the the tabs what were passed by. One can click a previous tab and make modification in it. 
+		38)	classRevalidate: "revalidate" this is the class that apply to html elements based on which the wizardTab will revalidate itself. 
+							if we are currently in step 4 in a wizard tab and when clicking on tab 1 where we modify something that has class revalidate applyed to it
+							it will disable all the tabs after the tab 1 were it will revalidate.   		
+        39) tabsVisible number of tabs that will be shown all the time.
+       
+       Note: if both of hideInvalidButtons and disableInvalidButtons options 
+       		are provided and set to false, the plugin will use the default 
+       		mode for invalid buttons ( enable them and make them visible)
+     
+     	Typical call of building the component is:
+     
+     	 jQuery(document).ready(function(){
+	 			var tabs = $("#tabs").wizardtab({
+                    isWizard: true, // set the wizardTab plugin to start in wizard mode. Read above.
+                    showTab: 1,     // the
+					tabsVisible:7,   // number of tabs that will be visible 
+					scrollTabsBy:1,  // number of tabs that will be used to scroll left or right
+					disableInvalidNextButton:true, // option to disable/enable the next button
+					hideInvalidNextButton:true, // option to hide/show the next button
+
+					disableInvalidPreviousButton:true, // option to disable/enable the previous button
+					hideInvalidPreviousButton:true, // option to hide/show the previewos button
+
+					disableInvalidFinishButton:true, // option to disable/enable finish button
+					hideInvalidFinishButton:true, // option to hide/show the finnish button
+
+                    onFinish: myFinishFunction, // function to execute when last tab is visible and activated
+                    onTabChange: onTabChangeFn, // function to execute when the tabs are changed
+                    onTabFirst: onTabFirstFn, // function to execute when the current tab active is first one
+                    onTabLast: onTabLastFn,   // function to execute when current tab active is last one
+					buttonNextId:"btnWizardTabNext", // the id of the next button
+					buttonPreviousId:"btnWizardTabPrevious", // the id of the previous button
+					buttonFinishId:"btnWizardTabFinish", // the id of the finish button
+					buttonNextCaption:"Next>>", // the caption for the next button
+					buttonPreviousCaption:"<<previous",// the caption for the previous button
+					buttonFinishCaption:"<<Finish>>", // the caption for finnish button
+					classTabHeads:"tabHeads", // the class for ul container that will hold the tabs head
+					buttonLeftScrollClass : "buttonLeftScroll", // the css class for button left scroll
+					buttonRightScrollClass : "buttonRightScroll", // the css class for button right scroll
+					
+					hideInvalidLeftScrollButton:true, // hide/show the invalid scroll left button
+					disableInvalidLeftScrollButton:false, // disable/enable the invalid scroll left button
+        			hideInvalidRightScrollButton:true,  // hide/show the invalid scroll right button
+					disableInvalidRightScrollButton:false, // disable/enable the invalid scroll right buttonb
+        			allowPreviousWhenPassed:true, // this will activate the option to click on a tab that was passed in order to make some change in that tab
+					classRevalidate: "revalidate" // this is the class that when applied to an element it will revalidate the wizard tab. Read above for more information 
+                });
+      
+      Smallest possible plugin initialization is: (with default values in the plugin core):
+      
+      var tabs = $("#tabs").wizardtab();
+      
+      
+      You will need to wait for the Dom to be ready in order to use the plugin.
+      This can be accomplished using jquery call:
+      jQuery(document).ready(function(){ }); 
+      
+      After the component was initialized, the params tabs can be used to
+      control the behavior of the component. The following code will be 
+      perfectly valid:
+      
+      tabs.IsWizard(false/true); can be access from anywhere. Read above for usage
+      tabs.IsFirst(); check to see if the current tab is first one.
+      tabs.IsLast();  check to see if the current tab is last one.
+   
+	   
+	 HTML: 
+	 <!-- wholetab container -->
+	 	<div id="tabs" class='WizardTabs'>
+            <!-- the headers for tabs -->
+			<ul class="tabHeads">
+                <li class='tabHead'><a href="#tabs-1">tab 1 bico</a></li>
+                <li class='tabHead'><a href="#tabs-2">tab 2 abc</a></li>
+            </ul>
+            <!-- end headed for tabs -->
+            
+            <!-- scrolling  buttons -->
+			<button class="buttonLeftScroll">&lt;&lt;</button>
+			<button class="buttonRightScroll">&gt;&gt;</button>
+			<-- end scrolling buttons -->
+			
+			<!-- body of tha tabs -->
+			<div id="tabs-1" class="WizardTabsBody">
+                <p><span style="font-size:100px;">18</span>
+                </p>
+            </div>
+			<div id="tabs-2" class="WizardTabsBody">
+                <p><span style="font-size:100px;">19</span>
+                </p>
+            </div>
+			<!-- end body of tabs -->
+			
+			<!-- navigation buttons -->
+			<input type="button" name="btnWizardTabPrevious" id="buttonPreviousStep" value="prev" />
+			<input type="button" name="btnWizardTabNext" id="buttonNextStep" value="next" />
+			<input type="button" name="btnWizardTabFinish" id="buttonFinishStep" value="finish" />
+			<!-- end navigation buttons -->
+			
+        </div>
+     <!-- end wholetab container -->
+     
+     CSS:
+     The container class for wizardTab plugin must be defined. 
+     Here it is used WizardTabs css class. 
+     All the CSS style must be under this class in order to apply stylesheet only for WizardTab plugin
+
+.WizardTabs {
+	margin:15px 15px;
+}
+.WizardTabs .buttonLeftScroll { /* this can be customized */
+	float:left;
+	height:34px;
+	text-align:center;
+	vertical-align:center;
+	cursor:pointer;
+}
+.WizardTabs .buttonRightScroll { /* this can be customized */
+	float:left;
+	height:34px;
+	text-align:center;
+	vertical-align:center;
+	cursor:pointer;
+}
+.WizardTabs .tabHeads{ 
+	width:820px; /* this is the width constrain and it can be defined */
+	height:50px; /* this is the height of the tab headers and can be customized to make the tab head prettier 
+	overflow:hidden;  /* DO NOT CHANGE */
+	float:left;		  /* DO NOT CHANGE */
+	position:relative;/* DO NOT CHANGE */
+}
+
+.WizardTabs .disabled {
+ 	color:gray; /* define the color for disabled elements */
+}
+.WizardTabs>ul.tabHeads { /* DO NOT CHANGE */
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+.WizardTabs>ul.tabHeads>li {
+	float:left; /* DO NOT CHANGE */
+	font-size:14px; /* change to define the font size */
+	font-weight:bolder; /* change to define the font weight*/
+	margin-bottom:2px; /* change to define the bottom margin*/
+	display:block;/* DO NOT CHANGE */
+	
+}
+.WizardTabs>ul.tabHeads>li>a {
+	display:block;  /* DO NOT CHANGE */
+	height:20px;  	/* change to fit the height of tabs */
+	text-decoration:none; /* change to make prettier links */
+	padding: 5px 5px; /* can be changed */
+	color:blue;       /* can be changed */
+	cursor:pointer; /* DO NOT CHANGE */
+	border:1px solid blue; /*can be changed*/
+}
+.WizardTabs>ul.tabHeads>li.disabled>a{
+	border:1px solid gray; /* can be changed */
+	cursor:default; /* DO NOT CHANGE */
+	color:gray; /* define the color for disabled a element */
+}
+
+.WizardTabs>div { /* this define the appearance of the tab body */ 
+	display:block; /* DO NOT CHANGE */
+	clear:both;    /* DO NOT CHANGE */
+	margin: 10px 10px; 			/* can be changed to fit the design */
+	margin-left:0; 				/* can be changed to fit the design */
+	border:1px solid #cecece;	/* can be changed to fit the design */
+	display:none;				/* can be changed to fit the design */
+	width:100%;		/* DO NOT CHANGE */
+}

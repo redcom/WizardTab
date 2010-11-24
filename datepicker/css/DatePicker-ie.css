@@ -1,0 +1,7 @@
+html .datepick-cmd-clear span,
+html .datepick-cmd-close span{
+	display: block; margin: -1px 0 0;
+}
+span.datepick-trigger{
+	margin-top: 1px;
+}

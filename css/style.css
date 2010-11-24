@@ -1,0 +1,101 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    font-size: 12px;
+}
+
+.WizardTabs {
+	margin:15px 15px;
+	width:65%;
+}
+.WizardTabs .buttonLeftScroll {
+	float:left;
+	height:34px;
+	text-align:center;
+	vertical-align:center;
+	cursor:pointer;
+}
+.WizardTabs .buttonRightScroll {
+	float:left;
+	height:34px;
+	text-align:center;
+	vertical-align:center;
+	cursor:pointer;
+}
+.WizardTabs .tabHeads{
+	width:620px; /* this is the width constrain */
+	height:50px;
+	overflow:hidden;
+	float:left;
+	position:relative;
+}
+
+#tabs_2 .tabHeads{
+	width:450px;
+}
+
+.WizardTabs .disabled {
+	color:gray;
+	
+}
+.WizardTabs>ul.tabHeads {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+.WizardTabs>ul.tabHeads>li {
+	float:left;
+	font-size:14px;
+	font-weight:bolder;
+	margin-bottom:2px;
+	display:block;
+	
+}
+.WizardTabs>ul.tabHeads>li>a {
+	display:block;
+	height:20px;
+	text-decoration:none;
+	padding: 5px 5px;
+	color:blue;
+	cursor:pointer;
+	border:1px solid blue;
+}
+.WizardTabs>ul.tabHeads>li.disabled>a{
+	border:1px solid gray;
+	cursor:default;
+	color:gray;
+}
+
+.WizardTabs>div {
+	display:block;
+	clear:both;
+	margin: 10px 10px;
+	margin-left:0;
+	border:1px solid #cecece;
+	display:none;
+	width:100%;
+}
+
+.demoBox {
+    border: 1px solid red;
+    width: 200px;
+    height: 200px;
+	
+}
+
+.log {
+	position:absolute;
+	right:20px;
+	bottom:200px;
+	width:300px;
+	height:250px;
+	overflow:auto;
+	background-color:gray;
+	color:black;
+	padding-left:10px;
+}
+#log_v2 {
+	top:400px;
+}
+
